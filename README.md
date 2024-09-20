@@ -1,7 +1,5 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__Hi👋__，In this section, we're going to have some fun - change the picture of the slot machine! 💡 Doesn't it feel cool? Don't worry, the whole process is very simple and doesn't require advanced programming knowledge. You can add as many pictures as you like to your slot machine as you like, whether it's the classic fruit icon 🍒🍋, any other pattern you like, or even your own creative design! Just follow the steps and you'll be able to give your slot machine a new look, making it more personalized and fun.
 Ready to make your slot machine unique? Do it with me! 👩‍💻🎨
-
-[Demo video 📺]()
 # M5StickCPlus2_Slot Project
 ## Project structure
 ``` 
@@ -11,12 +9,12 @@ Ready to make your slot machine unique? Do it with me! 👩‍💻🎨
   │── Slot.cpp                 # Slot Function Implementation File
   │── SLot.h                   # Slot function definition file
   │── image                    # Image folder
-    │── slot_bar.h                 # esp32 icons
-    │── slot_cherry.h              # Cherry icon
-    │── slot_lemon.h               # lemon icon
-    │── slot_openelab.h            # OpenELAB logo
-    │── slot-orange.h              # Orange icon
-    │── slot_seven.h               # Number 7 icon
+    │── Ghostface.h                # Ghostface icons
+    │── Happy.h                    # Happy icon
+    │── Kiss.h                     # Kiss icon
+    │── Spectre.h                  # Spectre logo
+    │── Think.h                    # Think icon
+    │── Vomit.h                    # Vomit icon
     │── slot_symbols.h             # Icon Data
 ```
 ## Installation and operation
@@ -25,33 +23,43 @@ Ready to make your slot machine unique? Do it with me! 👩‍💻🎨
 Software dependency: __Arduino IDE__, __VScode__ or __text__, etc.
 Hardware requirements: __USB-C cable__, __M5StickCPlus2__, etc.
 Dependencies: __M5StickCPlus2 library__, __Arduino library__, etc.
-### Arduino IDE Installation Steps
-```
-Link: upload later
-```
 ### Installation of dependencies
-1、After installing the Arduino IDE, open the Arduino settings, copy the M5 development board link to the arrow shown and click OK to save it.
+1、首先我们先找到我们想要的0-10张图片，图片要求背景白色或者无色，并且大小为150✖️150。  
+2、我们需要将图片转换为十六进制形式的数组，每16位为一个单位也就是0X0000的RGB565的十六进制形式，此次我们提供给大家两种取模方式，第一种是基于Windows系统，采用Lcdimg2进行取模。首先我们先下载好Lcdimg2（网络上有许多教程），设置分辨率为48*48（测试得出可以获得）4608的0X00单位的十六进制数，然后我们自己编写了一个小的程序，将该4608个单位转换成2304个0X0000的十六进制形式，来达到我们所需要的RGB565的十六进制的格式。  
+3、第二种方式则是使用ChatGPT，给其图片先将图片切割为150✖️150的大小，再让他输出RGB565格式的0X0000的十六进制点C文件。  
+4、通过其中任意一种方式获得.C文件后，我们会获得如图所示的十六进制进制数据，我们将数据复制下来。  
+
+![QQ_1726811953404](https://github.com/user-attachments/assets/8b591bc5-a7a5-416c-938f-9da808154194)  
+
+5、我们在image文件夹中新建一个.h文件，命名为图片的名字例如：Ghostface.h，在文件中写入如下代码，并且保存  
 ```
-https://static-cdn.m5stack.com/resource/arduino/package_m5stack_index.json
+#include <Arduino.h>//引入Arduino文件库
+const uint16_t PROGMEM Ghostface[] = {//数组名字需要和文件名称一致
+  //将我们刚才复制的所有十六进制复制进来
+}
 ```
-![QQ_1726105473838](https://github.com/user-attachments/assets/367bd060-13ab-4eda-9a43-13fbc0250580)  
-  
-2、Open Tools->Board->Boards Manager
+![QQ_1726812224766](https://github.com/user-attachments/assets/a6a0305a-0f8a-4271-a708-937936538f91)  
 
-![QQ_1726105693629](https://github.com/user-attachments/assets/e70b4f19-c21a-4ea5-80e2-4d150b54a35f)  
-  
-3、Search for M5Stack and choose to install it, it's already installed on this host so I won't repeat the installation.
+6、然后打开我们的slot_symbols.h文件,输入如下代码  
 
-![QQ_1726105854495](https://github.com/user-attachments/assets/11b18b6c-c8db-4ea4-b209-d22dd26eebbe) 
+```
+#include "Ghostface.h"//引入我们刚才所写的文件、
+#define SYM
 
-4、Select development version, Tools->Board->M5Stack Arduino->M5StickCPlus2 
+#define SYM_WIDTH 48    //图标宽度
+#define SYM_HEIGHT 48   //图标高度
+#define SYM_COUNT 1     //图标数量  //添加图标后  数字需要增加  有几个图标数字就是多少
 
-![QQ_1726106317846](https://github.com/user-attachments/assets/203d874b-f316-4ae7-827b-2e01493ce08d)
+const uint16_t *slot_symbols[] = {//此数组中的名字来源于，我们编写的十六进制数据的.h文件中
+	Ghostface//我们刚才命名的数组名称，将十六进制数据放入slot_symbols指针数组中
+};
+```
 
+7、然后打开我们的M5StickCPlus2_slot.ino项目文件，在第一部分中已经介绍过，此处能够更改我们的图片，其中的数字代表*slot_symbols指针数组中的十六进制数据所代表的图片，例如我们在例子中写了Ghostface，我们放在了第一位，那么在下图symbolIndices数组中就写入数字0，为什么是数字0呢，因为数字的起始坐标为0，所以如果我们放入了两张图片那么我们写入的就是0以及1，如果三张那么就是0，1，2。不建议相同数字靠在一起。并且在symbolIndices数组中数字只能在合理范围
 
-5、Next, install the M5StickCPlus2 library, select Tools->Manage Libraries, search for M5StickCPlus2, and then select Install, which will not be repeated if it is already installed.
+![QQ_1726813215593](https://github.com/user-attachments/assets/41581cf8-2213-48c1-bd82-9850d648586d)  
 
-![QQ_1726106703496](https://github.com/user-attachments/assets/312bc9e1-521c-479e-831a-a3c22e45a6ec)  
+8、如果需要添加多张图片同样是使用前面几个步骤的方法，依次放入即可，最多支持10张图片。  
 
 ### compile and run
 1、After completing the installation of the dependencies, open the good downloaded zip archive
