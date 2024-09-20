@@ -7,10 +7,10 @@
 
 #define SLOT_COUNT 5
 
-#define Speed_MAX 800//老虎机转动最大速度
-#define Speed_MIN 50//老虎机减小的速度
+#define Speed_MAX 800//Maximum speed of slot machine rotation
+#define Speed_MIN 50//slot machine reduced speed
 
-enum SlotState { SLOT_INIT, SLOT_START, SLOT_STOP, SLOT_DRIFT };//老虎机状态
+enum SlotState { SLOT_INIT, SLOT_START, SLOT_STOP, SLOT_DRIFT };//Slot Machine Status
 
 class Slot {
 public:
