@@ -16,17 +16,17 @@ enum SlotsState { SLOTS_INIT, SLOTS_START, SLOTS_STOP = SLOT_COUNT + 1, SLOTS_FL
 int state = SLOTS_INIT;//Slot machine state value Set to initial state
 
 //
-// setup()//初始化函数
+// setup()//Initialization Functions
 //
 
 void setup() {
    M5.begin();
   M5.Lcd.setRotation(3);
-  M5.Lcd.fillScreen(TFT_BLACK);//设置屏幕背景色为黑色
+  M5.Lcd.fillScreen(TFT_BLACK);//Set the screen background color to black
   M5.Lcd.setSwapBytes(true);
 
-  Slot::initShadow();//初始化阴影
-  Slot::setReel(symbolIndices, _countof(symbolIndices));//设置初始转盘
+  Slot::initShadow();//initialize shadows
+  Slot::setReel(symbolIndices, _countof(symbolIndices));//Setting the initial dial
   for (int i = 0; i < SLOT_COUNT; i++) {
     slots[i].init(i, i * SLOT_COUNT);
     slots[i].draw();
@@ -34,27 +34,27 @@ void setup() {
 }
 
 //
-// loop()//主函数，该函数中由于需要时刻刷新老虎机LCD所以不能出现类似于delay_ms的延时
+// loop()//main function, the function needs to refresh the slot machine LCD at all times, so there can not be a delay similar to delay_ms
 //
 
 void loop() {
-  unsigned long tick = millis();//获得当前心跳值
+  unsigned long tick = millis();//Get the current heartbeat value
   static unsigned long flushTick;
   static int flushCount;
 
   M5.update();
-  if (M5.BtnA.wasPressed()) {//按键触发
-    if (state == SLOTS_INIT) {//若处于初始状态 开始转动老虎机
+  if (M5.BtnA.wasPressed()) {//keystroke trigger
+    if (state == SLOTS_INIT) {//If it's in the initial state, start spinning the slot machine.
       for (int i = 0; i < SLOT_COUNT; i++) {
         slots[i].start();
       }
       state++;
-    } else if (state < SLOTS_STOP) {//处于开启状态且不处于暂停状态，停止一列
+    } else if (state < SLOTS_STOP) {//is on and not in pause, stops a column
       slots[state - 1].stop();
-      state++;//递增到第二列
+      state++;//Increment to the second column
     }
   }
-  if (state == SLOTS_STOP) {//老虎机处于停止状态，初始化相关数据，使得老虎机回到初始状态
+  if (state == SLOTS_STOP) {// The slot machine is in a stopped state, initializing the relevant data to bring the slot machine back to its initial state.
     int symbol = -1;
     bool stopAll = true;
     for (int i = 0; i < SLOT_COUNT; i++) {
@@ -76,11 +76,11 @@ void loop() {
     }
   }
  
-  if (state == SLOTS_FLUSH) {//当所有列全部停止
+  if (state == SLOTS_FLUSH) {//When all columns are stopped
     if (tick >= flushTick + FLUSH_DELAY) {
       flushTick = tick;
       for (int i = 0; i < SLOT_COUNT; i++) {
-        slots[i].flush((flushCount & 1) ? TFT_WHITE : TFT_BLUE);//若所有列出现图标相同，背景显示蓝色否则不变
+        slots[i].flush((flushCount & 1) ? TFT_WHITE : TFT_BLUE);//If all columns have the same icon, the background will be blue otherwise unchanged.
       }
       if (++flushCount >= FLUSH_COUNT * 2) {
         state = SLOTS_INIT;
@@ -88,7 +88,7 @@ void loop() {
     }
   }
 
-  for (int i = 0; i < SLOT_COUNT; i++) {//刷新LCD当前画面显示
+  for (int i = 0; i < SLOT_COUNT; i++) {//Refresh LCD current screen display
     if (slots[i].update()) {
       slots[i].draw();
     }
