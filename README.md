@@ -24,26 +24,28 @@ Software dependency: __Arduino IDE__, __VScode__ or __text__, etc.
 Hardware requirements: __USB-C cable__, __M5StickCPlus2__, etc.  
 Dependencies: __M5StickCPlus2 library__, __Arduino library__, etc.  
 ### Installation of dependencies
-1、First we start by finding the 1-10 images we want, which require a white or colorless background and a size of 150✖️150.  
+1、First, let's pick out 1-10 images with a clean, white or transparent background, all perfectly sized at 150x150 pixels.  
   
-2、We need to convert the picture into a hexadecimal form of the array, each 16-bit unit is 0X0000 RGB565 hexadecimal form, this time we provide you with two ways to take the mold, the first is based on the Windows system, the use of Lcdimg2 to take the mold. First of all, we first download a good Lcdimg2 (there are many tutorials on the network), set the resolution to 48 * 48 (test can be obtained) 4608 hexadecimal number of 0X00 units, and then we wrote a small program, the 4608 units will be converted to 2304 hexadecimal form of 0X0000, to achieve the RGB565 we need! The hexadecimal form。  
+2、To convert the image into a hexadecimal array in RGB565 format (where each 16-bit unit is 0X0000), we have two options for you! The first method uses Windows and the handy tool Lcdimg2. Here's the process:  
+
+Start by downloading Lcdimg2 (you can find plenty of tutorials online if needed).Set the image resolution to 48x48 (this gives you 4608 hex units in the 0X00 format).We've written a small program that takes those 4608 units and converts them into 2304 hex units in the 0X0000 format, giving you the RGB565 format we need!
   
-3、The second way would be to use ChatGPT and give him the image to first cut the image to the size of 150✖️150 and then have him output a hexadecimal dot C file of 0X0000 in RGB565 format.
-  
-4、After getting the .C file by any of these ways, we get the hexadecimal binary data as shown in the figure, which we copy down.
+3、The second option is even cooler—just use ChatGPT! Here's the plan:  Upload your image, and ChatGPT will resize it to 150x150 pixels for you.Then, it will work its magic and output the image as a .C file in RGB565 format, with each pixel in 0X0000 hexadecimal form.Fast, easy, and you get your image converted into the format you need without lifting a finger!  
+
+4、Once we have the .C file generated using either method, we’ll have a neatly structured hexadecimal binary dataset—just like the example shown. All we need to do is copy down this data, and we’re all set for the next step!
 
 ![QQ_1726811953404](https://github.com/user-attachments/assets/8b591bc5-a7a5-416c-938f-9da808154194)  
 
-5、We create a new .h file in the image folder, name it as the name of the image e.g. Ghostface.h, write the following code in the file and save it
+5、We create a new .h file in the image folder, name it as the name of the image (e.g. Ghostface.h), write the following code in the file, and save it.
 ```
-#include <Arduino.h>//引入Arduino文件库
+#include <Arduino.h>//Introducing the Arduino File Library
 const uint16_t PROGMEM Ghostface[] = {// The name of the array needs to match the name of the file.
   //Copy in all the hex we just copied.
 }
 ```
 ![QQ_1726812224766](https://github.com/user-attachments/assets/a6a0305a-0f8a-4271-a708-937936538f91)  
 
-6、Then open our slot_symbols.h file, and enter the following code
+6、Then open our slot_symbols.h file, and enter the following code.
 
 ```
 #include "Ghostface.h"//Introduce the file we just wrote
@@ -58,11 +60,12 @@ const uint16_t *slot_symbols[] = {//The names in this array are derived from, in
 };
 ```
 
-7、Then open our M5StickCPlus2_slot.ino project file, in the first part has been introduced, here to be able to change our picture, where the number represents *slot_symbols pointer array of hexadecimal data represented by the picture, for example, we wrote in the example of the Ghostface, we put in the first place, then in the The following figure symbolIndices array write the number 0, why is the number 0 it, because the starting coordinate of the number is 0, so if we put two pictures then we write is 0 and 1, if three then it is 0, 1, 2. It is not recommended that the same number close together. It is not recommended to put the same numbers next to each other, and the numbers in the symbolIndices array can only be within a reasonable range.
+7、Next, open our M5StickCPlus2_slot.ino project file. We've already covered the initial setup, and now we’ll move on to changing the picture. The number represents the *slot_symbols pointer array’s hexadecimal data for each image. For example, if we use the Ghostface image and place it in the first position, then in the symbolIndices array, you would write the number 0. Why 0? Because the starting index is 0.
+So, if you have two images, you'd write 0 and 1. If three, then 0, 1, 2. Keep in mind, it’s not recommended to place the same numbers next to each other, and the values in the symbolIndices array must stay within a reasonable range.
 
 ![QQ_1726813215593](https://github.com/user-attachments/assets/41581cf8-2213-48c1-bd82-9850d648586d)  
 
-8、If you need to add more than one picture the same way using the previous steps, in order to put it can be, up to support 10 pictures.
+8、If you need to add more than one picture, just follow the same steps as before. You can add up to 10 pictures in total.
 
 ### compile and run
 1、After completing the installation of the dependencies, open the good downloaded zip archive
