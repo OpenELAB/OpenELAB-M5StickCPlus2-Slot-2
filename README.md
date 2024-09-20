@@ -20,46 +20,49 @@ Ready to make your slot machine unique? Do it with me! 👩‍💻🎨
 ## Installation and operation
 
 ### precondition
-Software dependency: __Arduino IDE__, __VScode__ or __text__, etc.
-Hardware requirements: __USB-C cable__, __M5StickCPlus2__, etc.
-Dependencies: __M5StickCPlus2 library__, __Arduino library__, etc.
+Software dependency: __Arduino IDE__, __VScode__ or __text__, etc.  
+Hardware requirements: __USB-C cable__, __M5StickCPlus2__, etc.  
+Dependencies: __M5StickCPlus2 library__, __Arduino library__, etc.  
 ### Installation of dependencies
-1、首先我们先找到我们想要的0-10张图片，图片要求背景白色或者无色，并且大小为150✖️150。  
-2、我们需要将图片转换为十六进制形式的数组，每16位为一个单位也就是0X0000的RGB565的十六进制形式，此次我们提供给大家两种取模方式，第一种是基于Windows系统，采用Lcdimg2进行取模。首先我们先下载好Lcdimg2（网络上有许多教程），设置分辨率为48*48（测试得出可以获得）4608的0X00单位的十六进制数，然后我们自己编写了一个小的程序，将该4608个单位转换成2304个0X0000的十六进制形式，来达到我们所需要的RGB565的十六进制的格式。  
-3、第二种方式则是使用ChatGPT，给其图片先将图片切割为150✖️150的大小，再让他输出RGB565格式的0X0000的十六进制点C文件。  
-4、通过其中任意一种方式获得.C文件后，我们会获得如图所示的十六进制进制数据，我们将数据复制下来。  
+1、First we start by finding the 1-10 images we want, which require a white or colorless background and a size of 150✖️150.  
+  
+2、We need to convert the picture into a hexadecimal form of the array, each 16-bit unit is 0X0000 RGB565 hexadecimal form, this time we provide you with two ways to take the mold, the first is based on the Windows system, the use of Lcdimg2 to take the mold. First of all, we first download a good Lcdimg2 (there are many tutorials on the network), set the resolution to 48 * 48 (test can be obtained) 4608 hexadecimal number of 0X00 units, and then we wrote a small program, the 4608 units will be converted to 2304 hexadecimal form of 0X0000, to achieve the RGB565 we need! The hexadecimal form。  
+  
+3、The second way would be to use ChatGPT and give him the image to first cut the image to the size of 150✖️150 and then have him output a hexadecimal dot C file of 0X0000 in RGB565 format.
+  
+4、After getting the .C file by any of these ways, we get the hexadecimal binary data as shown in the figure, which we copy down.
 
 ![QQ_1726811953404](https://github.com/user-attachments/assets/8b591bc5-a7a5-416c-938f-9da808154194)  
 
-5、我们在image文件夹中新建一个.h文件，命名为图片的名字例如：Ghostface.h，在文件中写入如下代码，并且保存  
+5、We create a new .h file in the image folder, name it as the name of the image e.g. Ghostface.h, write the following code in the file and save it
 ```
 #include <Arduino.h>//引入Arduino文件库
-const uint16_t PROGMEM Ghostface[] = {//数组名字需要和文件名称一致
-  //将我们刚才复制的所有十六进制复制进来
+const uint16_t PROGMEM Ghostface[] = {// The name of the array needs to match the name of the file.
+  //Copy in all the hex we just copied.
 }
 ```
 ![QQ_1726812224766](https://github.com/user-attachments/assets/a6a0305a-0f8a-4271-a708-937936538f91)  
 
-6、然后打开我们的slot_symbols.h文件,输入如下代码  
+6、Then open our slot_symbols.h file, and enter the following code
 
 ```
-#include "Ghostface.h"//引入我们刚才所写的文件、
+#include "Ghostface.h"//Introduce the file we just wrote
 #define SYM
 
-#define SYM_WIDTH 48    //图标宽度
-#define SYM_HEIGHT 48   //图标高度
-#define SYM_COUNT 1     //图标数量  //添加图标后  数字需要增加  有几个图标数字就是多少
+#define SYM_WIDTH 48    //Icon width
+#define SYM_HEIGHT 48   //Icon height
+#define SYM_COUNT 1     //Number of icons After adding icons, the number of icons needs to be increased The number of icons is the number of icons.
 
-const uint16_t *slot_symbols[] = {//此数组中的名字来源于，我们编写的十六进制数据的.h文件中
-	Ghostface//我们刚才命名的数组名称，将十六进制数据放入slot_symbols指针数组中
+const uint16_t *slot_symbols[] = {//The names in this array are derived from, in the .h file we wrote for the hex data
+	Ghostface//With the array name we just named, put the hexadecimal data into the slot_symbols pointer array
 };
 ```
 
-7、然后打开我们的M5StickCPlus2_slot.ino项目文件，在第一部分中已经介绍过，此处能够更改我们的图片，其中的数字代表*slot_symbols指针数组中的十六进制数据所代表的图片，例如我们在例子中写了Ghostface，我们放在了第一位，那么在下图symbolIndices数组中就写入数字0，为什么是数字0呢，因为数字的起始坐标为0，所以如果我们放入了两张图片那么我们写入的就是0以及1，如果三张那么就是0，1，2。不建议相同数字靠在一起。并且在symbolIndices数组中数字只能在合理范围
+7、Then open our M5StickCPlus2_slot.ino project file, in the first part has been introduced, here to be able to change our picture, where the number represents *slot_symbols pointer array of hexadecimal data represented by the picture, for example, we wrote in the example of the Ghostface, we put in the first place, then in the The following figure symbolIndices array write the number 0, why is the number 0 it, because the starting coordinate of the number is 0, so if we put two pictures then we write is 0 and 1, if three then it is 0, 1, 2. It is not recommended that the same number close together. It is not recommended to put the same numbers next to each other, and the numbers in the symbolIndices array can only be within a reasonable range.
 
 ![QQ_1726813215593](https://github.com/user-attachments/assets/41581cf8-2213-48c1-bd82-9850d648586d)  
 
-8、如果需要添加多张图片同样是使用前面几个步骤的方法，依次放入即可，最多支持10张图片。  
+8、If you need to add more than one picture the same way using the previous steps, in order to put it can be, up to support 10 pictures.
 
 ### compile and run
 1、After completing the installation of the dependencies, open the good downloaded zip archive
@@ -74,30 +77,7 @@ const uint16_t *slot_symbols[] = {//此数组中的名字来源于，我们编�
 
 ![QQ_1726107957719](https://github.com/user-attachments/assets/c1f953ad-5355-44e8-af0c-ac5da7542aa6)  
 
-## Instructions for use
-- ### Order and number of pictures
-The slot machine has five columns, each of which can hold up to 10 icons, and you can adjust their order at will!💡At the moment, we have prepared six 48x48 pixel material icons, their RGB565 hexadecimal data is already in the code, corresponding to elements 0 to 5 in the slot_symbols array. If you want to change the order and number of icons in each column, you can easily change the number in the symbolIndices array to change the display of the icons in each column!🔧🎨  
-
-![QQ_1726108827608](https://github.com/user-attachments/assets/45b5878d-3624-47b5-a671-fc40937d1898)
-
-- ### Column-to-column and figure-to-figure spacing
-By changing PAD_X and PAD_Y, you can change the spacing between columns and graphs, usually the default is 2 and 0. 
-
-![QQ_1726109192019](https://github.com/user-attachments/assets/3e14c412-8342-486d-ba00-b6a0f4d357ac)
-
-- ### Turntable rotation speed, stop reduction speed
-```
-#define Speed_MAX 800           //Maximum speed of slot machine rotation
-#define Speed_MIN 50            //Slot machine rotation minimum speed
-#define Acceleration_MAX 12     //Acceleration when the slot machine is accelerating
-#define Acceleration_MIN -20    //The acceleration when the slot machine is slowing down.
-```
-  ![QQ_1726109492610](https://github.com/user-attachments/assets/aaa6b4a0-79b1-491a-8dbd-ca76cc8c1eee)
-
 ## Next Issue Preview
-In the next issue, we will explain in detail how to change the picture of the slot machine, we will get the hexadecimal parameters of the picture by taking the model of the picture and adjusting it to the format we want, and then present the picture we want on the slot machine __Stay tuned!!!__
-
-![QQ_1726122393803](https://github.com/user-attachments/assets/71507de5-dad0-4688-84bf-56cc25878e35)
 
 ## How to contact the maintainer or developer
 __OpenELAB:__   
