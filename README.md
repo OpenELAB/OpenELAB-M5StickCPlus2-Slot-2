@@ -1,5 +1,6 @@
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__Hi👋__，In this section, we're going to have some fun - change the picture of the slot machine! 💡 Doesn't it feel cool? Don't worry, the whole process is very simple and doesn't require advanced programming knowledge. You can add as many pictures as you like to your slot machine as you like, whether it's the classic fruit icon 🍒🍋, any other pattern you like, or even your own creative design! Just follow the steps and you'll be able to give your slot machine a new look, making it more personalized and fun.
-Ready to make your slot machine unique? Do it with me! 👩‍💻🎨
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;__Hi__ 👋, in this section, we're going to have some fun by changing the slot machine’s images! 💡 Cool, right? Don't worry—it’s a simple process that doesn’t require advanced programming skills. You can add as many images as you like, whether it's classic fruit icons 🍒🍋, other patterns, or even your own creative designs! Just follow the steps, and you'll give your slot machine a personalized new look, making it more fun and unique.
+
+Ready to make your slot machine stand out? Let’s do it! 👩‍💻🎨
 # M5StickCPlus2_Slot Project
 ## Project structure
 ``` 
@@ -24,19 +25,19 @@ Software dependency: __Arduino IDE__, __VScode__ or __text__, etc.
 Hardware requirements: __USB-C cable__, __M5StickCPlus2__, etc.  
 Dependencies: __M5StickCPlus2 library__, __Arduino library__, etc.  
 ### Installation of dependencies
-1、First, let's pick out 1-10 images with a clean, white or transparent background, all perfectly sized at 150x150 pixels.  
+1、First, select 1–10 images with a clean white or transparent background, all perfectly sized at 150x150 pixels.
   
-2、To convert the image into a hexadecimal array in RGB565 format (where each 16-bit unit is 0X0000), we have two options for you! The first method uses Windows and the handy tool Lcdimg2. Here's the process:  
+2、To convert the image into a hexadecimal array in RGB565 format (where each 16-bit unit is 0x0000), we have two options! The first method uses Windows and the handy tool Lcdimg2. Here's how the process works:
 
-Start by downloading Lcdimg2 (you can find plenty of tutorials online if needed).Set the image resolution to 48x48 (this gives you 4608 hex units in the 0X00 format).We've written a small program that takes those 4608 units and converts them into 2304 hex units in the 0X0000 format, giving you the RGB565 format we need!
+Start by downloading Lcdimg2 (you can find plenty of tutorials online if needed). Set the image resolution to 48x48, resulting in 4608 hex units in the 0x00 format. We've written a small program that takes those 4608 units and converts them into 2304 hex units in the 0x0000 format, providing the RGB565 format required!
   
-3、The second option is even cooler—just use ChatGPT! Here's the plan:  Upload your image, and ChatGPT will resize it to 150x150 pixels for you.Then, it will work its magic and output the image as a .C file in RGB565 format, with each pixel in 0X0000 hexadecimal form.Fast, easy, and you get your image converted into the format you need without lifting a finger!  
+3、The second option is even cooler—just use ChatGPT! Here's the plan: Upload your image, and ChatGPT will resize it to 150x150 pixels for you. Then, it will convert the image into a .C file in RGB565 format, with each pixel represented in 0x0000 hexadecimal form. Fast, easy, and you get your image converted into the required format without lifting a finger!
 
-4、Once we have the .C file generated using either method, we’ll have a neatly structured hexadecimal binary dataset—just like the example shown. All we need to do is copy down this data, and we’re all set for the next step!
+4、Once the .C file is generated using either method, we’ll have a neatly structured hexadecimal binary dataset—just like the example shown. All that’s left is to copy this data, and we’ll be ready for the next step!
 
 ![QQ_1726811953404](https://github.com/user-attachments/assets/8b591bc5-a7a5-416c-938f-9da808154194)  
 
-5、We create a new .h file in the image folder, name it as the name of the image (e.g. Ghostface.h), write the following code in the file, and save it.
+5、Create a new .h file in the image folder and name it after the image (e.g., Ghostface.h). Write the following code inside the file and save it.
 ```
 #include <Arduino.h>//Introducing the Arduino File Library
 const uint16_t PROGMEM Ghostface[] = {// The name of the array needs to match the name of the file.
@@ -45,7 +46,7 @@ const uint16_t PROGMEM Ghostface[] = {// The name of the array needs to match th
 ```
 ![QQ_1726812224766](https://github.com/user-attachments/assets/a6a0305a-0f8a-4271-a708-937936538f91)  
 
-6、Then open our slot_symbols.h file, and enter the following code.
+6、Next, open the slot_symbols.h file and add the following code.
 
 ```
 #include "Ghostface.h"//Introduce the file we just wrote
@@ -60,8 +61,7 @@ const uint16_t *slot_symbols[] = {//The names in this array are derived from, in
 };
 ```
 
-7、Next, open our M5StickCPlus2_slot.ino project file. We've already covered the initial setup, and now we’ll move on to changing the picture. The number represents the *slot_symbols pointer array’s hexadecimal data for each image. For example, if we use the Ghostface image and place it in the first position, then in the symbolIndices array, you would write the number 0. Why 0? Because the starting index is 0.
-So, if you have two images, you'd write 0 and 1. If three, then 0, 1, 2. Keep in mind, it’s not recommended to place the same numbers next to each other, and the values in the symbolIndices array must stay within a reasonable range.
+7、Next, open the M5StickCPlus2_slot.ino project file. We've already covered the initial setup, so now we’ll move on to changing the images. The number represents the index of the slot_symbols pointer array’s hexadecimal data for each image. For example, if you use the Ghostface image in the first position, you would assign it the number 0 in the symbolIndices array, as indexing starts at 0. If you have two images, use 0 and 1, and so on. Avoid placing identical numbers consecutively, and keep values within a reasonable range.
 
 ![QQ_1726813215593](https://github.com/user-attachments/assets/41581cf8-2213-48c1-bd82-9850d648586d)  
 
