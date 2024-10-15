@@ -70,7 +70,7 @@ So, if you have two images, you'd write 0 and 1. If three, then 0, 1, 2. Keep in
 ### compile and run
 1、After completing the installation of the dependencies, open the good downloaded zip archive
 
-![QQ_1726107516108](https://github.com/user-attachments/assets/cb2362f7-1871-418e-94dd-92ddfe7284b7)  
+![image](https://github.com/user-attachments/assets/9357a72b-02ce-411c-87f9-38637b4d844c)  
 
 2、Connect the Plus2 to your computer using USB-C, select Tools->Port to choose your own port
 
